@@ -1,42 +1,45 @@
-import sys
+from sys import stdin
+import heapq
 
-input = sys.stdin.readline
 
-T = int(input())
+def check(data):
+    left, right = [], []
+    middle = data[0]
+    result = [middle]
+    for idx, val in enumerate(data[1:], 1):
+        if val > middle:
+            heapq.heappush(right, val)
+        else:
+            heapq.heappush(left, -val)
+        if idx % 2 == 0:
+            if len(left) < len(right):
+                heapq.heappush(left, -middle)
+                middle = heapq.heappop(right)
+            elif len(left) > len(right):
+                heapq.heappush(right, middle)
+                middle = -heapq.heappop(left)
+            result.append(middle)
 
-for _ in range(T) :
-    M = int(input())
-    n = M/10
-    k = M%10
-    arr = []
-    cnt = 0
-    while n > 0 :
-        tmp = list(map(int, input().split())) #한 줄에 10개씩
-        arr += tmp
-        n -= 1
-        if n==0 :
-            tmp = list(map(int, input().split()))
-            arr += tmp
-    if M % 2 == 1 :
-        cnt = M // 2 + 1
-    else :
-        cnt = M / 2
-    print(cnt)
-    i = 0
-    res = []
-    while cnt > i :
-        tmp = arr[0:i*2+1]
-        tmp.sort()
-        res.append(tmp[i])
-        i += 1
-    if cnt / 10 > 1 :
-        for j in range(1, (cnt // 10) + 2) :
-            if j*10 > cnt :
-                result = ' '.join(map(str, res[(j-1)*10:]))
-                print(result)
-                break
-            result = ' '.join(map(str, res[(j-1)*10:j*10]))
-            print(result)
-    else :
-        result = ' '.join(map(str, res))
-        print(result)
+    print(len(result))
+
+    for i in range(len(result)):
+        if (i + 1) != 1 and (i + 1) % 10 == 1:
+            print()
+        print(result[i], end=' ')
+    print()
+
+
+t = int(stdin.readline().rstrip())
+
+for _ in range(t):
+    m = int(input())
+    data = []
+
+    if m % 10 == 0:
+        for _ in range(m // 10):
+            data.extend(list(map(int, stdin.readline().rstrip().split())))
+    else:
+        for _ in range(m // 10 + 1):
+            data.extend(list(map(int, stdin.readline().rstrip().split())))
+
+    check(data)
