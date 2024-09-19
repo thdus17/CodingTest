@@ -1,37 +1,28 @@
-import java.util.Arrays;
+import java.util.*;
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        /**
-         * 1. progresses + speeds >> 앞에 있는 애가 100보다 크거나 같으면 해당 개수들 cnt해서 answer에 넣어주기
-         * 2. progresses에 있는 값들이 다 사라지면 그 때 끝!
-         */
-        int[] answers = new int[progresses.length];
+        Queue<Integer> q = new LinkedList<>();
+        List<Integer> answerList = new ArrayList<>();
 
-        int nowIdx = 0;
-        int n = 0;
-        while (nowIdx < progresses.length) {
-            int cnt = 0;
-            for (int i = nowIdx ; i < progresses.length ; i++) {
-                if (progresses[i]<100) {
-                    progresses[i] += speeds[i];
-                }
-            }
-            for (int i = nowIdx ; i < progresses.length;i++) {
-                if (progresses[i] >= 100) {
-                    cnt ++;
-                    nowIdx = i+1;
-                } else {
-                    break;
-                }
+        for (int i = 0; i < speeds.length; i++) {
+            double remain = (100 - progresses[i]) / (double) speeds[i];
+            int date = (int) Math.ceil(remain);
+
+            if (!q.isEmpty() && q.peek() < date) {
+                answerList.add(q.size());
+                q.clear();
             }
 
-            if (cnt > 0) {
-                answers[n] = cnt;
-                n++;
-            }
+            q.offer(date);
         }
 
-        int[] answer = Arrays.copyOfRange(answers, 0, n);
+        answerList.add(q.size());
+
+        int[] answer = new int[answerList.size()];
+
+        for (int i = 0; i < answer.length; i++) {
+            answer[i] = answerList.get(i);
+        }
 
         return answer;
     }
