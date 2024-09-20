@@ -13,8 +13,6 @@ class Solution {
         Arrays.sort(priorities);
         int size = priorities.length-1;
 
-
-
         while(!que.isEmpty()){
             Integer i = que.poll();
             if(i == priorities[size - answer]){
@@ -29,8 +27,6 @@ class Solution {
                     l=que.size()-1;
             }
         }
-
         return answer;
-
     }
 }
