@@ -14,15 +14,14 @@ class Solution {
         for (int truckWeight : truck_weights) {
             while (true) {
                 currentWeight -= bridge.poll(); 
-
+                time++; 
                 if (currentWeight + truckWeight <= weight) {
                     bridge.add(truckWeight); 
                     currentWeight += truckWeight; 
-                    time++; 
                     break;
                 } else {
                     bridge.add(0);
-                    time++; 
+                    
                 }
             }
         }
